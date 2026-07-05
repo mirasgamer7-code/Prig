@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение на бильярд 🎱</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg, #0b0c1a 0%, #1a1e30 100%);
+      padding: 1rem;
+    }
+
+    .card {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem 2.5rem;
+      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 215, 0, 0.15);
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      transition: all 0.3s ease;
+      text-align: center;
+      color: #f5f0eb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "🎱";
+      position: absolute;
+      font-size: 7rem;
+      opacity: 0.04;
+      bottom: -10px;
+      right: -10px;
+      transform: rotate(15deg);
+      pointer-events: none;
+    }
+
+    .card::after {
+      content: "✨";
+      position: absolute;
+      font-size: 4rem;
+      opacity: 0.06;
+      top: 10px;
+      left: 10px;
+      transform: rotate(-10deg);
+      pointer-events: none;
+    }
+
+    .emoji-billiard {
+      font-size: 4.2rem;
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 8px 12px rgba(255, 215, 0, 0.25));
+      margin-bottom: 0.5rem;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(-2deg); }
+      50% { transform: translateY(-10px) rotate(2deg); }
+      100% { transform: translateY(0px) rotate(-2deg); }
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      margin: 0.2rem 0 0.3rem;
+      background: linear-gradient(135deg, #ffe68f, #ffd966);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .sub {
+      font-size: 1rem;
+      color: #c8c2d9;
+      margin-bottom: 1.6rem;
+      border-bottom: 1px dashed rgba(255, 215, 0, 0.2);
+      padding-bottom: 0.8rem;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+    }
+
+    .question-box {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 2rem;
+      padding: 1.2rem 1rem;
+      margin: 1.5rem 0 1.8rem;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      box-shadow: inset 0 4px 10px rgba(0,0,0,0.4);
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .question {
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #fff4e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      transition: all 0.3s ease;
+    }
+
+    .question span {
+      background: rgba(255, 215, 0, 0.15);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 1.7rem;
+      line-height: 1.4;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 2rem 0 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: 0.3px;
+      position: relative;
+      min-width: 120px;
+      justify-content: center;
+    }
+
+    .btn-yes {
+      background: linear-gradient(145deg, #4caf84, #2d8f6f);
+      color: white;
+      box-shadow: 0 4px 15px rgba(76, 175, 132, 0.4);
+    }
+    .btn-yes:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(76, 175, 132, 0.6);
+    }
+
+    .btn-no {
+      background: linear-gradient(145deg, #5a4a6b, #3d2e4d);
+      color: #d4c9e0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .btn-no:active {
+      transform: scale(0.94);
+    }
+
+    .btn-no--disabled {
+      opacity: 0.4;
+      filter: grayscale(0.7);
+      pointer-events: none;
+      transform: scale(0.95);
+    }
+
+    .btn-no__message {
+      display: none;
+      font-size: 0.65rem;
+      background: #ffb3b3;
+      color: #5a1e1e;
+      padding: 0.2rem 0.7rem;
+      border-radius: 40px;
+      font-weight: 600;
+      margin-left: 4px;
+      white-space: nowrap;
+    }
+
+    .btn-no--disabled .btn-no__message {
+      display: inline-block;
+      animation: popMsg 0.3s ease;
+    }
+
+    @keyframes popMsg {
+      0% { opacity: 0; transform: scale(0.6); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .response-area {
+      margin: 1.8rem 0 1rem;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .response-message {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.9rem 1.8rem;
+      border-radius: 80px;
+      font-size: 1.15rem;
+      border: 1px solid rgba(255, 215, 0, 0.25);
+      color: #faeedb;
+      font-weight: 400;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      animation: fadeSlide 0.5s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      max-width: 100%;
+      line-height: 1.4;
+    }
+
+    .response-message.hidden {
+      display: none;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(15px) scale(0.92); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .details {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      background: rgba(255, 215, 0, 0.05);
+      border-radius: 60px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      color: #bdb5d1;
+      border: 1px solid rgba(255, 215, 0, 0.08);
+      backdrop-filter: blur(2px);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .details i {
+      font-style: normal;
+      background: rgba(255, 215, 0, 0.1);
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      color: #ffe28c;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.7rem;
+      color: #6b6380;
+      letter-spacing: 0.8px;
+    }
+
+    .counter {
+      font-size: 0.75rem;
+      color: #6b6380;
+      margin-top: 0.6rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 1.5rem 1rem; }
+      h1 { font-size: 1.8rem; }
+      .question { font-size: 1.1rem; }
+      .btn { padding: 0.6rem 1.2rem; font-size: 1rem; min-width: 90px; }
+      .btn-group { gap: 0.8rem; }
+      .response-message { font-size: 1rem; padding: 0.7rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="main">
+    <div class="emoji-billiard">🎱</div>
+    <h1>Бильярд &amp; Ты</h1>
+    <div class="sub">✨ вечер, который мы запомним ✨</div>
+
+    <div class="question-box" id="questionBox">
+      <div class="question" id="questionText">
+        <span>❓</span> Составишь мне компанию за зелёным столом?
+      </div>
+    </div>
+
+    <div class="btn-group" id="buttonGroup">
+      <button class="btn btn-yes" id="yesBtn">Давай! 🎱</button>
+      <button class="btn btn-no" id="noBtn">
+        Нет <span class="btn-no__message">❌ занято</span>
+      </button>
+    </div>
+
+    <div class="response-area" id="responseArea">
+      <div class="response-message hidden" id="responseMessage">
+        <span>💫</span> <span id="messageText">Отличный выбор!</span>
+      </div>
+    </div>
+
+    <div class="details">
+      <span>🕒</span> <i>суббота, 19:00</i>
+      <span>📍</span> <i>Billiard Club</i>
+    </div>
+    <div class="footer-note">♥ нажми «Нет» — и он передумает за тебя</div>
+    <div class="counter" id="clickCounter">👆 кликов: 0</div>
+  </div>
+
+  <script>
+    (function() {
+      const yesBtn = document.getElementById('yesBtn');
+      const noBtn = document.getElementById('noBtn');
+      const responseMessage = document.getElementById('responseMessage');
+      const messageText = document.getElementById('messageText');
+      const questionText = document.getElementById('questionText');
+      const clickCounter = document.getElementById('clickCounter');
+
+      // ===== ВОПРОСЫ С РАЗНЫМИ ВАРИАНТАМИ ОТВЕТОВ =====
+      const questions = [
+        {
+          emoji: '🎯',
+          text: 'Готова разбить шары и моё сердце?',
+          yes: ['Разобью! 💥', 'С удовольствием!', 'Только шары! 😏', 'Погнали! 🎯'],
+          no: ['Подумаю... 🤔', 'Слабо?', 'А ты уверен?', 'Может, позже?'],
+          yesReply: ['Осторожно, я влюблюсь!', '🔥 Жду твоего удара!', 'Это будет бомба!', '💖 Ты — снайпер!'],
+          noReply: ['😏 Боишься проиграть?', '🎯 Ты промахиваешься!', '🔥 Испугалась?', '💪 Я верю в тебя!']
+        },
+        {
+          emoji: '🔥',
+          text: 'Сыграем так, что свечи погаснут?',
+          yes: ['Зажжём! 🔥', 'Давай накалим!', 'Я готов!', 'Адский бильярд!'],
+          no: ['А вдруг я боюсь?', 'Я могу проиграть...', 'Не сегодня', 'В другой раз'],
+          yesReply: ['😈 Ты опасна!', '🔥 Мы устроим шоу!', '💥 Это будет жарко!', '✨ Я чувствую огонь!'],
+          noReply: ['😎 Трусишь?', '🔥 Я зажгу за нас двоих!', '😉 Ты упускаешь момент!', '💪 Огонь внутри меня!']
+        },
+        {
+          emoji: '💫',
+          text: 'Хочешь стать моей звездой бильярдного вечера?',
+          yes: ['Я звезда! ✨', 'Конечно хочу!', 'Да! Я готова!', 'Осветим вечер!'],
+          no: ['Я скромная...', 'Не сегодня', 'Может, я луна? 🌙', 'Не уверена'],
+          yesReply: ['🌟 Ты — главная звезда!', '💖 Весь вечер буду смотреть на тебя!', '✨ Свети ярко!', '💫 Звёзды сошлись!'],
+          noReply: ['😏 Ты уже звезда в моём сердце!', '🌟 А я купил билеты на твой концерт!', '✨ Даже звёзды удивлены!', '💫 Не отказывайся!']
+        },
+        {
+          emoji: '😏',
+          text: 'Слабо обыграть меня в бильярд?',
+          yes: ['Слабо? Легко! 💪', 'Обыграю! 😎', 'А вот и посмотрим!', 'Я мастер!'],
+          no: ['Я не умею', 'Ты сильнее', 'А давай в другой раз?', 'Нууу... сомневаюсь'],
+          yesReply: ['😈 Вызов принят!', '💪 Битва титанов!', '🔥 Осторожно, я крут!', '🎯 Ты уверена?'],
+          noReply: ['😏 Значит слабо?', '💪 Я научу тебя!', '🎯 Я дам тебе фору!', '😉 Докажи обратное!']
+        },
+        {
+          emoji: '🎱',
+          text: 'Держишь кий так же круто, как меня в напряжении?',
+          yes: ['Держу отлично!', 'Конечно! 😏', 'Я профи!', 'Ещё бы!'],
+          no: ['Я новичок', 'У тебя лучше', 'Не знаю', 'Сомневаюсь'],
+          yesReply: ['😏 Я чувствую твой стиль!', '💖 Ты меня заводишь!', '🔥 Опасная ты!', '🎯 Я обожаю это!'],
+          noReply: ['😅 Я научу тебя!', '🔥 Ты быстро научишься!', '😉 Я хороший учитель', '💪 Я покажу приёмы!']
+        },
+        {
+          emoji: '💘',
+          text: 'Сыграем партию, после которой ты влюбишься?',
+          yes: ['Уже влюбилась! 💕', 'Я готов!', 'Давай проверим!', 'Обещаешь?'],
+          no: ['Я уже влюблена', 'Это вряд ли', 'Посмотрим', 'Не верю'],
+          yesReply: ['💖 Я уже влюблён в твой азарт!', '🔥 Это будет магия!', '😈 Я приготовил сюрприз!', '💘 Химия уже есть!'],
+          noReply: ['💔 Разбиваешь сердце!', '😏 Я умею убеждать!', '💫 Судьба так решила!', '🔥 Приходи, проверь!']
+        },
+        {
+          emoji: '😎',
+          text: 'Хочешь увидеть, как я мастерски забиваю... шары?',
+          yes: ['Да! Покажи!', 'Хочу!', 'Посмотрю на тебя!', 'Давай удиви!'],
+          no: ['Наверное, вру', 'Потом как-нибудь', 'Мне всё равно', 'Покажи в другой раз'],
+          yesReply: ['😎 Тогда смотри!', '💫 Я покажу шоу!', '🔥 Ты офигеешь!', '🎯 Я в домике!'],
+          noReply: ['😏 Боишься?', '🎱 Я не вру!', '🔥 А я хочу тебе показать!', '💪 Ты пожалеешь!']
+        },
+        {
+          emoji: '🌙',
+          text: 'Вечер бильярда под луной — звучит как план?',
+          yes: ['Романтика! 💕', 'Мечта!', 'Да! Это круто!', 'Я согласна!'],
+          no: ['Слишком романтично', 'Я не фанат луны', 'Может, в другой раз', 'Не уверена'],
+          yesReply: ['🌙 Луна будет рада!', '💖 Это волшебство!', '✨ Ночь будет нашей!', '😏 Ты — моя луна!'],
+          noReply: ['🌙 Луна будет грустить', '😏 Я покажу лунный бильярд!', '💫 Ты упускаешь магию!', '✨ Приходи, проверь!']
+        },
+        {
+          emoji: '🍀',
+          text: 'Повезёт тебе сегодня. Или мне. Или нам обоим?',
+          yes: ['Повезёт всем! 🍀', 'Удача на моей стороне!', 'Нам обоим!', 'Я верю в удачу!'],
+          no: ['Я не верю в удачу', 'Мне сегодня не везёт', 'Только тебе', 'Ты везучий'],
+          yesReply: ['🍀 Ты поймала удачу!', '💖 Нам повезло!', '🎱 Удача с нами!', '✨ Сегодня наш день!'],
+          noReply: ['🍀 Ты отказываешься от удачи?', '😏 Удача уже в пути!', '💫 Это твой день!', '🎱 Удача не любит отказов!']
+        },
+        {
+          emoji: '🎉',
+          text: 'Устроим шоу с шарами, смехом и моими глупыми шутками?',
+          yes: ['Шоу будет! 🎉', 'Хочу смеяться!', 'Давай!', 'Люблю глупые шутки!'],
+          no: ['Я не люблю шутки', 'Можно без шуток', 'Ты не смешной', 'Пауза...'],
+          yesReply: ['🎉 Ура! Я готов!', '💖 Смех до упаду!', '🔥 Мои шутки зажигают!', '😈 Шоу начинается!'],
+          noReply: ['😅 Мои шутки не такие уж глупые!', '🎉 Без тебя неинтересно!', '💫 Ты пропускаешь стендап!', '😏 Я обещаю смешить!']
+        },
+        {
+          emoji: '💎',
+          text: 'Ты — алмаз. А я — твой бильярдный стол. Совпадение?',
+          yes: ['Идеально! 💎', 'Совпадение? Нет! Судьба!', 'Я алмаз!', 'Это магия!'],
+          no: ['Ты преувеличиваешь', 'Я просто человек', 'Слишком пафосно', 'Странный ты'],
+          yesReply: ['💎 Это судьба!', '💖 Ты сияешь!', '🔥 Магия бильярда!', '✨ Звёзды сошлись!'],
+          noReply: ['💎 Алмазы не говорят "нет"', '😏 Ты чувствуешь это?', '💫 Это знак!', '😈 Не сопротивляйся!']
+        },
+        {
+          emoji: '🎶',
+          text: 'Слышишь? Это шары стучат в ритм моего сердца',
+          yes: ['Слышу! 💕', 'Музыка для души!', 'Это красиво!', 'Я чувствую ритм!'],
+          no: ['Я глухая', 'Что за чушь?', 'Нервничаешь?', 'Не слышу'],
+          yesReply: ['💖 Самый красивый ритм!', '🔥 У нас будет дуэт!', '🎶 Мы создадим музыку!', '✨ Сердце и шары!'],
+          noReply: ['💔 Моё сердце остановилось', '😏 Ты не слышишь?', '🎶 Шары зовут тебя!', '💫 Музыка ждёт!']
+        }
+      ];
+
+      let currentQuestionIndex = 0;
+      let isNoDisabled = false;
+      let noClickCount = 0;
+      let yesClicked = false;
+      let totalClicks = 0;
+      let usedQuestions = [];
+
+      function getQuestion() {
+        let available = questions.filter((_, i) => !usedQuestions.includes(i));
+        if (available.length === 0) {
+          usedQuestions = [];
+          available = questions;
+        }
+        const randomIndex = Math.floor(Math.random() * available.length);
+        const realIndex = questions.indexOf(available[randomIndex]);
+        usedQuestions.push(realIndex);
+        return questions[realIndex];
+      }
+
+      function showMessage(text, emoji = '💬') {
+        responseMessage.classList.remove('hidden');
+        messageText.textContent = text;
+        const emojiSpan = responseMessage.querySelector('span:first-child');
+        if (emojiSpan) emojiSpan.textContent = emoji;
+        responseMessage.style.animation = 'none';
+        requestAnimationFrame(() => {
+          responseMessage.style.animation = 'fadeSlide 0.5s ease';
+        });
+      }
+
+      function updateButtons(q) {
+        if (q && q.yes && q.no) {
+          const yesText = q.yes[Math.floor(Math.random() * q.yes.length)];
+          const noText = q.no[Math.floor(Math.random() * q.no.length)];
+          yesBtn.textContent = yesText;
+          noBtn.firstChild.textContent = noText;
+        }
+      }
+
+      function changeQuestion() {
+        const q = getQuestion();
+        currentQuestionIndex = questions.indexOf(q);
+        questionText.innerHTML = `<span>${q.emoji}</span> ${q.text}`;
+        updateButtons(q);
+        
+        const box = document.getElementById('questionBox');
+        box.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+        box.style.transform = 'scale(0.92)';
+        box.style.opacity = '0.5';
+        setTimeout(() => {
+          box.style.transform = 'scale(1)';
+          box.style.opacity = '1';
+        }, 180);
+        
+        return q;
+      }
+
+      function updateCounter() {
+        clickCounter.textContent = `👆 кликов: ${totalClicks}`;
+      }
+
+      let currentQuestion = null;
+
+      // ===== Обработка "ДА" (левая кнопка) =====
+      function handleYesClick(e) {
+        e.preventDefault();
+        totalClicks++;
+        updateCounter();
+
+        const q = currentQuestion || changeQuestion();
+        const replies = q.yesReply || ['💖 Отлично!', '🔥 Круто!'];
+        const reply = replies[Math.floor(Math.random() * replies.length)];
+        showMessage(reply, '💖');
+        
+        currentQuestion = changeQuestion();
+
+        if (!yesClicked) {
+          yesClicked = true;
+          if (!isNoDisabled) {
+            noBtn.classList.add('btn-no--disabled');
+            isNoDisabled = true;
+          }
+          yesBtn.style.transform = 'scale(1.15)';
+          setTimeout(() => { yesBtn.style.transform = ''; }, 250);
+          
+          const card = document.querySelector('.card');
+          card.style.transition = 'box-shadow 0.4s';
+          card.style.boxShadow = '0 0 60px rgba(255,215,0,0.6), 0 30px 50px rgba(0,0,0,0.7)';
+          setTimeout(() => {
+            card.style.boxShadow = '';
+          }, 1200);
+        } else {
+          const extraCompliments = [
+            '💖 Ты — огонь!', '🎱 Ты — легенда!', '✨ С тобой круто!',
+            '🔥 Ты зажигаешь!', '😍 Я счастлив!'
+          ];
+          showMessage(extraCompliments[Math.floor(Math.random() * extraCompliments.length)], '😍');
+        }
+      }
+
+      // ===== Обработка "НЕТ" (правая кнопка) =====
+      function handleNoClick(e) {
+        e.preventDefault();
+        totalClicks++;
+        updateCounter();
+
+        if (isNoDisabled) {
+          const msgs = [
+            '🚫 Кнопка "Нет" сломалась!',
+            '😏 Отказ недоступен!',
+            '🔥 Судьба решила за тебя!',
+            '💫 Только ДА имеет силу!'
+          ];
+          showMessage(msgs[Math.floor(Math.random() * msgs.length)], '😜');
+          currentQuestion = changeQuestion();
+          return;
+        }
+
+        noClickCount++;
+        
+        const q = currentQuestion || changeQuestion();
+        const replies = q.noReply || ['😊 Подумай ещё', '💪 Я верю в тебя'];
+        const reply = replies[Math.floor(Math.random() * replies.length)];
+        showMessage(reply, '😊');
+        
+        currentQuestion = changeQuestion();
+
+        if (noClickCount >= 5) {
+          noBtn.classList.add('btn-no--disabled');
+          isNoDisabled = true;
+          const finalMsg = [
+            '🚫 "Нет" закончился!',
+            '😏 Блокировка активирована!',
+            '🔥 Только ДА спасёт!',
+            '💫 Судьба сказала ДА!'
+          ];
+          setTimeout(() => {
+            showMessage(finalMsg[Math.floor(Math.random() * finalMsg.length)], '🚫');
+          }, 500);
+        }
+
+        noBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => { noBtn.style.transform = ''; }, 150);
+      }
+
+      // Инициализация
+      currentQuestion = changeQuestion();
+      responseMessage.classList.add('hidden');
+      updateCounter();
+
+      yesBtn.addEventListener('click', handleYesClick);
+      noBtn.addEventListener('click', handleNoClick);
+      noBtn.addEventListener('contextmenu', (e) => e.preventDefault());
+    })();
+  </script>
+</body>
+</html>
